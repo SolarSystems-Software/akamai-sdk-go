@@ -1,0 +1,19 @@
+package akamai
+
+import "testing"
+
+func TestIsCookieValid(t *testing.T) {
+	const (
+		validCookie = `0C8A2251CC04F60F59160D6AD92DA8A0~0~YAAQlivJF6o1GjGGAQAAaNihYgldsErwKa3aAlB+oRlgZYviinJa+Q29XMXmkwJUNCgQPooQUyhfjhAgavSMACfCk1doYnUa4dYmsVUWbWB+QGFEPuwcvLVQscLV8taHWIFuFxb94vEJ8MnSY9sQlhRN9i2iNgZ5QJz8h2s2mMm4ZO+i890DPaHfJPkSrYtc9ivgbjDA/jFpK6k2Pq8Pu25dCI55zOqOeSyaChgtJyF6KvlnlyVrqOa12tThX+prb52et7FRGmqhw8LU5X1E07WShiKDmJw2Rb8+odHcA28bD3EITXTy43QFb2PKR9Q3jy57KFEQYFaeW4xfAe8BxjdpkYt5vSH50nmbi1SXOWIxL4QV0b8psJgMCIq+ZMR+ZBU2opuHgxAucktvbIffGuJPWFYJu8thjxr5HGBtZBUqc6LwccFQI+DZd+hpZfsRJscvNx0yWmiPN8/gJiVLGkjHWYL5xmVaVCYceTtGL+7N~-1~-1~-1`
+
+		invalidCookie = `854B24C98DF862FDB9DCD7A8D317E790~-1~YAAQD9EuF64U3i+GAQAAi4KiYgl2JJkGoiwHRFw9d1ydtwnDgsRP0T430nSi/T2y7FlplzdKdYvXM0KrSFHYihPCtk1q02Svk5o+zRUL0er1Es2seEZ+eYJd/oljAXr0txBiTR2m2wOljTkR2tYpySDTgejzAcL4F/li1yohgPUhesd/Fy+SYi4TZWUYqbmA891e/Qk9wsZ9wPauT7OoItcAR87P02MGDovYsgBIMMSd0D5YM8j9go0pPf/FqEzHXAEHXlsIvlvYko3nwZBHh9qF3glg63ws824anT/msjpH1urkBFDcPZlvnTcTmyNZjBU+2jc4chGiHir5CSZCLXCD7RwRVFGsyRrN8k1wZdo1T1RprOGwzl7KYHX/n3zW0kNPkQjOBVsBVNZc0mw19Lp+RSb0fSdMxLQEatfouFW2ExurswQ1Ow1YIvxjS4wsqMk2BLAa0Kdk1k8ISwpPS1U2MI0zvMSI/+YMcne+DOgkl9v7sxOLWxIsWZM7ppqttXg0s7imlxEZ4ZMqNQ1oR0MUjEvWjJ78ib437kqUzV4yM+7OnIuSeuhd+XF6tIZp4BmGRfQ=~-1~-1~-1`
+	)
+
+	if !IsCookieValid(validCookie, 1) {
+		t.Fail()
+	}
+
+	if IsCookieValid(invalidCookie, 1) {
+		t.Fail()
+	}
+}
