@@ -35,12 +35,6 @@ type GenerateRequest struct {
 	//
 	// This is optional for every version excluding `2`.
 	BmSz string `json:"bm_sz,omitempty"`
-
-	// ScriptValues are the dynamic script values.
-	//
-	// This should be empty for static scripts.
-	// See GetDynamicScriptValues for more information.
-	ScriptValues string `json:"scriptValues,omitempty"`
 }
 
 // GenerateResponse is the API generation response schema.
@@ -249,8 +243,8 @@ func (session Session) Generate(
 		defer wg.Done()
 
 		// Get script path
-		scriptPath := GetScriptPath(pageBody)
-		if scriptPath == "" {
+		ok, scriptPath := GetScriptPath(pageBody)
+		if !ok {
 			// If there's no script path on the page then we skip generating.
 			return
 		}
@@ -270,29 +264,13 @@ func (session Session) Generate(
 		// Get SDK version
 		version := GetSdkVersion(scriptBody)
 
-		// Get dynamic script values.
-		// This will be a blank string if the script is static.
-		var scriptValues string
-		if version == Version2 && !IsScriptStatic(scriptBody) {
-			response, err := session.GetDynamicScriptValues(ctx, scriptBody)
-			if err != nil {
-				addError(err)
-				return
-			}
-
-			if response.Success {
-				scriptValues = response.ScriptValues
-			}
-		}
-
 		// Generate and post sensor data
 		for i := 0; i < maxTries; i++ {
 			request := GenerateRequest{
-				UserAgent:    userAgent,
-				Version:      version,
-				PageURL:      pageUrl,
-				Abck:         getCookie(u, "_abck"),
-				ScriptValues: scriptValues,
+				UserAgent: userAgent,
+				Version:   version,
+				PageURL:   pageUrl,
+				Abck:      getCookie(u, "_abck"),
 			}
 			if version == Version2 {
 				request.BmSz = getCookie(u, "bm_sz")
