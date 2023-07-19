@@ -5,12 +5,11 @@ import "regexp"
 var scriptPathExpr = regexp.MustCompile(`<script type="text/javascript"(?i:.*) src="((?i)[/\w\-]+)">`)
 
 // GetScriptPath gets the Akamai Bot Manager web SDK path from the given HTML code src.
-// The result is an empty string if the path was not found.
-func GetScriptPath(src []byte) string {
+// ok is true if the path was found, otherwise it is false.
+func GetScriptPath(src []byte) (ok bool, path string) {
 	matches := scriptPathExpr.FindSubmatch(src)
-	if len(matches) < 2 {
-		return ""
-	} else {
-		return string(matches[1])
+	if ok = len(matches) >= 2; ok {
+		path = string(matches[1])
 	}
+	return
 }
